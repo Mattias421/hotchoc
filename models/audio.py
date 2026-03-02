@@ -50,7 +50,7 @@ class TDNNFlowMatchModel(BaseFairseqModel):
         # Generate sinusoidal time embeddings
         t_emb = sinusoidal_embedding(t, self.cfg.time_embedding_dim)
 
-        t = t[:,None,None]
+        t = t[:, None, None]
         x_t = (1 - (1 - self.cfg.sigma_min) * t) * x_0 + t * x_1
 
         u_t = x_1 - (1 - self.cfg.sigma_min) * x_0
@@ -60,12 +60,10 @@ class TDNNFlowMatchModel(BaseFairseqModel):
 
         model_output = self.model(x, t_emb)
 
-
         loss = torch.pow(model_output - u_t, 2).mean()
 
         return {
-            "loss": loss,
-            "padding_mask": padding_mask,
+            "losses": {"cfm":loss},
         }
 
 
@@ -116,7 +114,7 @@ class TDNNSimpleFlowMatchModel(BaseFairseqModel):
         # Generate sinusoidal time embeddings
         t_emb = sinusoidal_embedding(t, self.cfg.time_embedding_dim)
 
-        t = t[:,None,None]
+        t = t[:, None, None]
         x_t = (1 - (1 - self.cfg.sigma_min) * t) * x_0 + t * x_1
 
         u_t = x_1 - (1 - self.cfg.sigma_min) * x_0
@@ -125,14 +123,13 @@ class TDNNSimpleFlowMatchModel(BaseFairseqModel):
         x = x_t
         for layer in self.layers:
             x = layer(x, t_emb)
-            x[padding_mask] = 0
+            if padding_mask is not None:
+                x = x.masked_fill(padding_mask.unsqueeze(-1), 0)
 
         model_output = x
-
 
         loss = torch.pow(model_output - u_t, 2).mean()
 
         return {
             "loss": loss,
-            "padding_mask": padding_mask,
         }

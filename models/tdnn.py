@@ -388,6 +388,7 @@ class FTDNN(nn.Module):
 
         self.use_time_embedding = use_time_embedding
         self.time_embedding_dim = time_embedding_dim
+        self.in_dim = in_dim
 
         self.layer01 = TDNN(
             input_dim=in_dim,
@@ -477,16 +478,22 @@ class FTDNN(nn.Module):
             use_time_embedding=use_time_embedding,
             time_embedding_dim=time_embedding_dim,
         )
-        self.layer10 = DenseReLU(1024, 2048)
 
-        self.layer11 = StatsPool()
-
-        self.layer12 = DenseReLU(4096, 512)
+        # Final layer to map back to original dimension
+        self.final_layer = TDNN(
+            input_dim=1024,
+            output_dim=in_dim,
+            context_size=1,
+            padding=0,
+            use_time_embedding=use_time_embedding,
+            time_embedding_dim=time_embedding_dim,
+        )
 
     def forward(self, x, t=None):
         """
         Input must be (batch_size, seq_len, in_dim)
         t: time embedding (batch, time_embedding_dim) - optional
+        Output will be (batch_size, seq_len, in_dim)
         """
         x = self.layer01(x, t)
         x_2 = self.layer02(x, t)
@@ -500,9 +507,9 @@ class FTDNN(nn.Module):
         x_8 = self.layer08(x, t)
         skip_9 = torch.cat([x_8, x_6, x_4], dim=-1)
         x = self.layer09(skip_9, t)
-        x = self.layer10(x)
-        x = self.layer11(x)
-        x = self.layer12(x)
+
+        # Final layer to map back to original dimension
+        x = self.final_layer(x, t)
         return x
 
     def step_ftdnn_layers(self):

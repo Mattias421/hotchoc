@@ -86,10 +86,13 @@ class TrainAudio(FairseqTask):
         loss = res["loss"]
 
         logging_output = {
-            "loss": loss,
+            "loss": loss.item(),
+            "ntokens": sample["ntokens"],
+            "nsentences": sample["nsentences"],
+            "sample_size": sample["ntokens"],
         }
 
-        return loss, sample.shape[0], logging_output
+        return loss, sample["ntokens"], logging_output
 
     def load_dataset(self, split: str, task_cfg: FairseqDataclass = None, **kwargs):
         data_path = self.cfg.data
