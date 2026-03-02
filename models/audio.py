@@ -57,11 +57,8 @@ class TDNNFlowMatchModel(BaseFairseqModel):
 
         # Pass through TDNN layers with time embeddings
         x = x_t
-        for layer in self.layers:
-            x = layer(x, t_emb)
-            x[padding_mask] = 0
 
-        model_output = x
+        model_output = self.model(x, t_emb)
 
 
         loss = torch.pow(model_output - u_t, 2).mean()
