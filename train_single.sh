@@ -3,7 +3,7 @@
 PREFIX=cfm_unsup_audio
 
 # For wav2vec-U 2.0, use raw audio features
-CONFIG_NAME=tdnn-flowmatch
+CONFIG_NAME=tdnn_flowmatch
 TASK_DATA=$DATA/LibriSpeech-10hr-rVAD/features/wav2vec_vox
 
 
