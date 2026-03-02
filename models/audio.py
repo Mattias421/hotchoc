@@ -41,11 +41,8 @@ class TDNNFlowMatchModel(BaseFairseqModel):
     def build_model(cls, args, task):
         return cls(args)
 
-    def forward(self, x_1, padding_mask):
-        if padding_mask is not None:
-            unet_mask = ~padding_mask
-        else:
-            unet_mask = None
+    def forward(self, features, padding_mask):
+        x_1 = features
 
         x_0 = torch.randn_like(x_1)
         t = torch.rand((x_0.shape[0]))
@@ -53,18 +50,19 @@ class TDNNFlowMatchModel(BaseFairseqModel):
         # Generate sinusoidal time embeddings
         t_emb = sinusoidal_embedding(t, self.cfg.time_embedding_dim)
 
+        t = t[:,None,None]
         x_t = (1 - (1 - self.cfg.sigma_min) * t) * x_0 + t * x_1
 
         u_t = x_1 - (1 - self.cfg.sigma_min) * x_0
 
-        # Pass time embedding to the model
-        model_output = self.model(x_t, t_emb)
+        # Pass through TDNN layers with time embeddings
+        x = x_t
+        for layer in self.layers:
+            x = layer(x, t_emb)
+            x[padding_mask] = 0
 
-        # Apply mask if provided
-        if unet_mask is not None:
-            # Expand mask to match model output dimensions
-            mask_expanded = unet_mask.unsqueeze(-1).expand_as(model_output)
-            model_output = model_output.masked_fill(~mask_expanded, 0)
+        model_output = x
+
 
         loss = torch.pow(model_output - u_t, 2).mean()
 
