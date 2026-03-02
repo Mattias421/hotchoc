@@ -1,0 +1,31 @@
+BootStrap: docker
+From: andybi7676/reborn-uasr:1.0.1
+
+%post
+cd /workspace
+mkdir /workspace/tmp
+export TMPDIR=/workspace/tmp
+
+apt-get update
+apt-get install -y espeak-ng libespeak-ng-dev
+
+wget https://raw.githubusercontent.com/andybi7676/reborn-uasr/refs/heads/main/requirements.txt
+
+pip uninstall -y fairseq
+git clone https://github.com/facebookresearch/fairseq.git
+pip install --no-cache-dir -e fairseq
+
+git clone https://github.com/zhenghuatan/rVADfast.git
+cd rVADfast
+git checkout 33dad82
+cd /workspace
+
+pip install phonemizer
+
+git clone https://github.com/Splend1d/wav2vec-u-patch.git
+
+rm -rf /workspace/tmp
+
+%environment
+  export FAIRSEQ_ROOT=/workspace/fairseq
+  export RVAD_ROOT=/workspace/rVADfast

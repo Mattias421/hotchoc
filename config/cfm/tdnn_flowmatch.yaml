@@ -1,0 +1,58 @@
+# @package _group_
+
+common:
+  fp16: false
+  fp16_no_flatten_grads: true
+  log_format: json
+  log_interval: 100
+  tensorboard_logdir: tb
+  reset_logging: false
+  suppress_crashes: false
+
+checkpoint:
+  save_interval: 1000
+  save_interval_updates: 1000
+  no_epoch_checkpoints: true
+  best_checkpoint_metric: loss
+  save_dir: .
+
+distributed_training:
+  distributed_world_size: 1
+
+task:
+  _name: train_audio
+  data: ???
+  sort_by_length: false
+  max_length: null
+
+dataset:
+  num_workers: 1
+  batch_size: 160
+  skip_invalid_size_inputs_valid_test: true
+  valid_subset: valid
+  validate_interval: 1000
+  validate_interval_updates: 1000
+
+criterion:
+  _name: model
+
+optimization:
+  max_update: 150000
+  clip_norm: 5.0
+  lr: [0.0001]
+
+optimizer:
+  _name: adam
+  adam_betas: [0.9, 0.98]
+  adam_eps: 1e-06
+  weight_decay: 0.0
+
+lr_scheduler:
+  _name: fixed
+
+model:
+  _name: tdnn_flowmatch
+
+  channels: 1024
+  sigma_min: 0.1
+  time_embedding_dim: 128
