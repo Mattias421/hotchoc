@@ -17,5 +17,5 @@ PYTHONPATH=$FAIRSEQ_ROOT PREFIX=$PREFIX fairseq-hydra-train \
     optimization.max_update=100000 \
     hydra.run.dir=$EXP/outputs/cfm_audio_tdnn/lr_${lr}_smin_${sigma_min} \
     model.sigma_min=$sigma_min \
-    optimization.lr=$lr \
+    optimization.lr="[${lr}]" \
 

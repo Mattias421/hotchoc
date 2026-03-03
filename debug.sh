@@ -15,4 +15,5 @@ PYTHONPATH=$FAIRSEQ_ROOT PREFIX=$PREFIX fairseq-hydra-train \
     dataset.validate_interval=1 \
     optimization.max_update=100000 \
     hydra.run.dir=$EXP/outputs/cfm_audio_tdnn \
+    optimization.lr="[0.001]" \
 
