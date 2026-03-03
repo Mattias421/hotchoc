@@ -9,11 +9,21 @@
 #SBATCH --qos=gpu
 #SBATCH --gres=gpu:1
 
-TEXT_DATA=$1
-ORDER=$2
-
 mkdir -p logs
 
 echo "Launching Array Task $SLURM_ARRAY_TASK_ID on $HOSTNAME"
 
-apptainer exec --nv $EXP/apptainer/unsupgan.sif ./train_gan.sh $TEXT_DATA $ORDER
+job_count=0
+
+for lr in "[0.001]" "[0.0002]" "[0.0001]" "[0.00001]"; do
+  for sigma_min in 0.0 0.05 0.1 0.2 0.3; do
+
+    if [ "$job_count" -eq "$SLURM_ARRAY_TASK_ID" ]; then
+      echo "Starting task $SLURM_ARRAY_TASK_ID (lr=$lr, sigma_min=$sigma_min"
+      apptainer exec --nv $EXP/apptainer/unsupgan.sif ./train_single.sh $sigma_min $lr
+      exit 0
+    fi
+
+    job_count=$((job_count + 1))
+  done
+done
