@@ -45,7 +45,7 @@ class TDNNFlowMatchModel(BaseFairseqModel):
         x_1 = features
 
         x_0 = torch.randn_like(x_1)
-        t = torch.rand((x_0.shape[0]))
+        t = torch.rand((x_0.shape[0]), device=x_0.device)
 
         # Generate sinusoidal time embeddings
         t_emb = sinusoidal_embedding(t, self.cfg.time_embedding_dim)

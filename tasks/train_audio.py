@@ -83,16 +83,21 @@ class TrainAudio(FairseqTask):
             **sample["net_input"],
         )
 
-        loss = res["loss"]
+        sample_shape = sample["net_input"]["features"].shape
+        nsentences = sample_size[0]
+        ntokens = nsentences * sample_shape[1]
+        sample_size = ntokens * sample_shape[2]
+
+        loss = res["losses"]["cfm"]
 
         logging_output = {
             "loss": loss.item(),
-            "ntokens": sample["ntokens"],
-            "nsentences": sample["nsentences"],
-            "sample_size": sample["ntokens"],
+            "sample_size": sample_size,
+            "ntokens": ntokens,
+            "nsentences": nsentences,
         }
 
-        return loss, sample["ntokens"], logging_output
+        return 0, 1, logging_output
 
     def load_dataset(self, split: str, task_cfg: FairseqDataclass = None, **kwargs):
         data_path = self.cfg.data
