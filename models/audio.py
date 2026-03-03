@@ -60,7 +60,9 @@ class TDNNFlowMatchModel(BaseFairseqModel):
 
         model_output = self.model(x, t_emb)
 
-        loss = torch.pow(model_output - u_t, 2).mean()
+        model_output[padding_mask] = 0
+
+        loss = torch.pow(model_output - u_t, 2).sum() / (torch.sum(~padding_mask) * model_output.shape[-1])
 
         return {
             "losses": {"cfm":loss},

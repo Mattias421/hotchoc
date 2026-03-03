@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=w2vu_grid
+#SBATCH --job-name=tdnn_grid
 #SBATCH --array=0-15
 #SBATCH --time=15:00:00
 #SBATCH --cpus-per-task=1

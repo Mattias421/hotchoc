@@ -84,7 +84,7 @@ class TrainAudio(FairseqTask):
         )
 
         sample_shape = sample["net_input"]["features"].shape
-        nsentences = sample_size[0]
+        nsentences = sample_shape[0]
         ntokens = nsentences * sample_shape[1]
         sample_size = ntokens * sample_shape[2]
 
