@@ -20,9 +20,9 @@ distributed_training:
   distributed_world_size: 1
 
 task:
-  _name: train_audio
-  data: ???
-  sort_by_length: false
+  _name: train_text
+  text_data: ???
+  kenlm_path: ???
   max_length: null
 
 dataset:
@@ -51,7 +51,7 @@ lr_scheduler:
   _name: fixed
 
 model:
-  _name: tdnn_simple_flowmatch
+  _name: tdnn_flowmatch_text
 
   channels: 1024
   sigma_min: 0.1
