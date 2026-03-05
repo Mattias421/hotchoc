@@ -7,7 +7,7 @@ PREFIX=cfm_unsup_text
 
 # For wav2vec-U 2.0, use raw audio features
 CONFIG_NAME=text
-TEXT_DATA=$DATA/variety-text-corpus/ImageCaptions/text/phones
+TEXT_DATA=$DATA/variety-text-corpus/LibriLM/text/phones
 KENLM_PATH=$TEXT_DATA/lm.phones.filtered.04.bin
 
 PYTHONPATH=$FAIRSEQ_ROOT PREFIX=$PREFIX fairseq-hydra-train \
