@@ -68,8 +68,8 @@ def get_dataset_itr(cfg, task):
 
 def prepare_result_files(cfg: UnsupGenerateConfig):
 
-    l_f = open(os.join(cfg.results_path, f"{cfg.fairseq.dataset.gen_subset}.lengths"))
-    npaa = NpyAppendArray(os.join(cfg.results_path, f"{cfg.fairseq.dataset.gen_subset}.npy"))
+    l_f = open(os.path.join(cfg.results_path, f"{cfg.fairseq.dataset.gen_subset}.lengths"))
+    npaa = NpyAppendArray(os.path.join(cfg.results_path, f"{cfg.fairseq.dataset.gen_subset}.npy"))
 
     return {
         "lengths":l_f,
@@ -192,18 +192,15 @@ def main(cfg: UnsupGenerateConfig, model=None):
     if model is None:
         # Load ensemble
         logger.info("| loading model(s) from {}".format(cfg.fairseq.common_eval.path))
-        # models, saved_cfg = checkpoint_utils.load_model_ensemble(
-        #     cfg.fairseq.common_eval.path.split("\\"),
-        #     arg_overrides=overrides,
-        #     task=task,
-        #     suffix=cfg.fairseq.checkpoint.checkpoint_suffix,
-        #     strict=(cfg.fairseq.checkpoint.checkpoint_shard_count == 1),
-        #     num_shards=cfg.fairseq.checkpoint.checkpoint_shard_count,
-        # )
-        models, saved_cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-            [cfg.fairseq.common_eval.path],
-            arg_overrides={}
+        models, saved_cfg = checkpoint_utils.load_model_ensemble(
+            cfg.fairseq.common_eval.path.split("\\"),
+            arg_overrides=overrides,
+            task=task,
+            suffix=cfg.fairseq.checkpoint.checkpoint_suffix,
+            strict=(cfg.fairseq.checkpoint.checkpoint_shard_count == 1),
+            num_shards=cfg.fairseq.checkpoint.checkpoint_shard_count,
         )
+        
         optimize_models(cfg, use_cuda, models)
     else:
         models = [model]
