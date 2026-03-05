@@ -19,5 +19,5 @@ RESULTS_PATH=$CKPT/audio_gen
 
 mkdir -p logs
 
-apptainer exec $EXP/apptainer/unsupgan.sif ./generate_audio.sh $TEST_DATA_NAME $CKPT $RESULTS_PATH
+apptainer exec $EXP/apptainer/unsupgan.sif ./run_audio_generate.sh $TEST_DATA_NAME $CKPT $RESULTS_PATH
 

@@ -17,6 +17,7 @@ PYTHONPATH=$FAIRSEQ_ROOT PREFIX=$PREFIX fairseq-hydra-train \
     task.kenlm_path=${KENLM_PATH} \
     common.user_dir=$HOME/hotchoc \
     optimization.max_update=100000 \
+    dataset.batch_size=64 \
     hydra.run.dir=$EXP/outputs/cfm_text_tdnn/lr_${lr}_smin_${sigma_min} \
     model.sigma_min=$sigma_min \
     optimization.lr="[${lr}]" \
