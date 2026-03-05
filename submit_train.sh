@@ -20,7 +20,7 @@ for lr in 0.001 0.0002 0.0001 0.00001; do
 
     if [ "$job_count" -eq "$SLURM_ARRAY_TASK_ID" ]; then
         echo "Starting task $SLURM_ARRAY_TASK_ID (lr=$lr, sigma_min=$sigma_min)"
-        apptainer exec --nv $EXP/apptainer/unsupgan.sif ./train_single.sh $sigma_min $lr
+        apptainer exec --nv $EXP/apptainer/unsupgan.sif ./train_text.sh $sigma_min $lr
         exit 0
     fi
 
