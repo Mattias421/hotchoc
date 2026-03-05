@@ -68,7 +68,7 @@ def get_dataset_itr(cfg, task):
 
 def prepare_result_files(cfg: UnsupGenerateConfig):
 
-    l_f = open(os.path.join(cfg.results_path, f"{cfg.fairseq.dataset.gen_subset}.lengths"))
+    l_f = open(os.path.join(cfg.results_path, f"{cfg.fairseq.dataset.gen_subset}.lengths"), 'w')
     npaa = NpyAppendArray(os.path.join(cfg.results_path, f"{cfg.fairseq.dataset.gen_subset}.npy"))
 
     return {
