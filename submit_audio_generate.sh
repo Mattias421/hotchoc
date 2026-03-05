@@ -18,6 +18,7 @@ CKPT=$EXP/outputs/cfm_audio_tdnn/${CKPT_NAME}
 RESULTS_PATH=$CKPT/audio_gen
 
 mkdir -p logs
+mkdir -p $RESULTS_PATH
 
 apptainer exec $EXP/apptainer/unsupgan.sif ./run_audio_generate.sh $TEST_DATA_NAME $CKPT $RESULTS_PATH
 
