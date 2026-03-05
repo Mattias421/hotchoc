@@ -1,0 +1,12 @@
+fairseq:
+  task: 
+    _name: train_audio
+    data: ???
+
+  common_eval:
+    path: ???
+    quiet: true
+
+  dataset:
+    gen_subset: valid
+    batch_size: 1

@@ -233,7 +233,7 @@ def main(cfg: UnsupGenerateConfig, model=None):
 
 
 @hydra.main(
-    config_path=os.path.join("/workspace",  "fairseq", "fairseq", "config"), config_name="config"
+    config_path=os.path.join("./", "config"), config_name="generate"
 )
 def hydra_main(cfg):
     with open_dict(cfg):
