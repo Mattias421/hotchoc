@@ -140,10 +140,10 @@ def generate(cfg: UnsupGenerateConfig, models, saved_cfg, use_cuda):
                 models, num_feats, sample, task, use_cuda
             )
 
-            for i, padding_mask in enumerate(sample["padding_mask"]):
+            for i, padding_mask in enumerate(sample["net_input"]["padding_mask"]):
                 length = (~padding_mask).sum()
                 print(length, res_files["lengths"])
-                res_files["npaa"].append(gen_vec[i, length].numpy())
+                res_files["npaa"].append(gen_vec[i, :length].numpy())
 
 
             num_sentences += (
@@ -172,7 +172,7 @@ def gen(models, num_feats, sample, task, use_cuda):
             * sample["net_input"]["features"].shape[1]
         )
 
-    gen_vec = models.generate(**["net_input"])
+    gen_vec = models[0].generate(**sample["net_input"])
     return gen_vec, num_feats
 
 
@@ -242,11 +242,7 @@ def hydra_main(cfg):
 
     utils.import_user_module(cfg.fairseq.common)
 
-    _, score = main(cfg)
-
-    if cfg.is_ax:
-        return score, None
-    return score
+    main(cfg)
 
 
 def cli_main():
