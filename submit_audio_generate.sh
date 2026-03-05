@@ -12,8 +12,7 @@ echo "Using CPU"
 #SBATCH --gres=gpu:1
 
 TEST_DATA_NAME=$1
-TRAIN_DATA_NAME=$2
-CKPT_NAME=$3
+CKPT_NAME=$2
 
 CKPT=$EXP/outputs/cfm_audio_tdnn/${CKPT_NAME}
 RESULTS_PATH=$CKPT/audio_gen

@@ -1,7 +1,6 @@
 DATA=$1
 CKPT=$2
 RESULTS_PATH=$3
-TEXT_DATA=$4
 
 cd $FAIRSEQ_ROOT/examples/wav2vec/unsupervised
 
