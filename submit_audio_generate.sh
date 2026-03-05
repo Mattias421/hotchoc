@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=w2vu_gen
+#SBATCH --job-name=audio_gen
 #SBATCH --time=1:00:00
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=64G
