@@ -100,7 +100,6 @@ GenResult = namedtuple(
 
 def generate(cfg: UnsupGenerateConfig, models, saved_cfg, use_cuda):
     task = tasks.setup_task(cfg.fairseq.task)
-    saved_cfg.task.labels = cfg.fairseq.task.labels
     task.load_dataset(cfg.fairseq.dataset.gen_subset, task_cfg=saved_cfg.task)
     # Set dictionary
     tgt_dict = task.target_dictionary
