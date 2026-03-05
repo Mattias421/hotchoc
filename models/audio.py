@@ -25,7 +25,7 @@ class FlowMatchConfig(FairseqDataclass):
     time_embedding_dim: int = 128
 
 
-@register_model("tdnn_flowmatch", dataclass=FlowMatchConfig)
+@register_model("tdnn_flowmatch_audio", dataclass=FlowMatchConfig)
 class TDNNFlowMatchModel(BaseFairseqModel):
     def __init__(self, cfg: FlowMatchConfig):
         super().__init__()
@@ -68,3 +68,25 @@ class TDNNFlowMatchModel(BaseFairseqModel):
         return {
             "losses": {"cfm":loss},
         }
+
+    @torch.no_grad
+    def generate(self, features, padding_mask, n_timesteps=100):
+        self.model = self.model.eval()
+
+        x_t = torch.randn_like(features) # x_0
+        x_t[padding_mask] = 0
+
+        h = 1 / n_timesteps
+        t = 0
+
+        for i in range(n_timesteps):
+            t = torch.ones(x_t.shape[0], device=x_t.device)
+            t_emb = sinusoidal_embedding(t, self.cfg.time_embedding_dim)
+            v_t = self.model(x_t, t_emb) 
+
+            x_t = x_t + h * v_t
+            x_t[padding_mask] = 0
+
+        self.model = self.model.train()
+
+        return x_t
