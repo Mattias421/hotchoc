@@ -10,3 +10,6 @@ fairseq:
   dataset:
     gen_subset: valid
     batch_size: 1
+
+  model:
+    _name: cfm_audio_tdnn
