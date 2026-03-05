@@ -25,7 +25,8 @@ class FlowMatchConfig(FairseqDataclass):
     time_embedding_dim: int = 128
 
 
-@register_model("tdnn_flowmatch_audio", dataclass=FlowMatchConfig)
+# TODO change name to fit audio desc
+@register_model("tdnn_flowmatch", dataclass=FlowMatchConfig)
 class TDNNFlowMatchModel(BaseFairseqModel):
     def __init__(self, cfg: FlowMatchConfig):
         super().__init__()
