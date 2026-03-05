@@ -189,9 +189,6 @@ def main(cfg: UnsupGenerateConfig, model=None):
 
     overrides = ast.literal_eval(cfg.fairseq.common_eval.model_overrides)
 
-    if cfg.decode_stride:
-        overrides["model"]["generator_stride"] = int(cfg.decode_stride)
-
     if model is None:
         # Load ensemble
         logger.info("| loading model(s) from {}".format(cfg.fairseq.common_eval.path))
@@ -213,12 +210,6 @@ def main(cfg: UnsupGenerateConfig, model=None):
         saved_cfg.task.sort_by_length = False
 
     gen_result = generate(cfg, models, saved_cfg, use_cuda)
-
-    wer = None
-    if gen_result.lengths_t > 0:
-        wer = gen_result.errs_t * 100.0 / gen_result.lengths_t
-        logger.info(f"WER: {wer}")
-
 
     logger.info(
         "| Processed {} sentences ({} tokens) in {:.1f}s ({:.2f}"
