@@ -201,7 +201,7 @@ def main(cfg: UnsupGenerateConfig, model=None):
         #     num_shards=cfg.fairseq.checkpoint.checkpoint_shard_count,
         # )
         models, saved_cfg, task = checkpoint_utils.load_model_ensemble_and_task(
-            [cfg.fairseq.common_eval.path.split("\\")],
+            [cfg.fairseq.common_eval.path],
             arg_overrides={}
         )
         optimize_models(cfg, use_cuda, models)
